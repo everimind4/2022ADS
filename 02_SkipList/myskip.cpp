@@ -75,10 +75,12 @@ class Skiplist {
 int main(int argc, char* argv[]) {  // main의 argument로 file을 입력
     if (argc != 2) {                // File은 하나만 입력
         cout << "./a.out (filename)" << endl;   // 올바른 형식 출력
+        return -1;
     }
     ifstream fin(argv[1]);          // Filename으로 file open
     if (!fin.is_open()) {           // File이 존재하지 않을 경우
         cout << "Could not open the file '" << argv[1] << "' . . ." << endl;
+        return -2;
     }                               // Error Message 출력
     string line;                    // File 내용을 한 줄씩 저장
     Skiplist mySkip;                // Skip List를 저장할 Class 객체
