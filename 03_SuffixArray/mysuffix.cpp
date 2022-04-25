@@ -8,7 +8,7 @@ using namespace std;
 int main() {
     ifstream fin("indata.txt");     // indata.txt 파일 open
     if (!fin.is_open()) {           // File이 존재하지 않을 경우
-        cout << "Could not open the file '" << argv[1] << "' . . ." << endl;
+        cout << "There is no 'indata.txt' file . . ." << endl;
         return -1;
     }                               // Error Message 출력
     chrono::system_clock::time_point start, finish; // 시간 측정을 위한 변수
