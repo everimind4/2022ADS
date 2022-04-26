@@ -38,13 +38,13 @@ int main() {
         sort(sa, sa+n, compare);            // 현재 그룹으로 Suffix를 정렬
         nextgroup[sa[0]] = 0;               // 현재 가장 앞 그룹을 1번 그룹으로 지정
         for (int i = 0; i < n-1; i++)       // 새로 정렬된 Suffix를 그룹핑
-            if (compare(sa[i], sa[i+1]))    // 접미사의 그룹을 비교하여
+            if (compare(sa[i], sa[i+1]))    // 부분문자열의 순위를 비교하여
                 nextgroup[sa[i+1]] = nextgroup[sa[i]]+1;    // 다르면 다음 그룹 할당
-            else                            // 서로 동일한 그룹인 경우
+            else                            // 서로 순위가 동일한 경우
                 nextgroup[sa[i+1]] = nextgroup[sa[i]];      // 동일한 그룹 할당
         for (int i = 0; i < n; i++)         // 새로 할당한 그룹을
             group[i] = nextgroup[i];        // 기존 그룹에 Update
-        l <<= 1;                            // 비교 대상 Prefix를 Douling
+        l <<= 1;                            // 비교 길이를 Douling
     }
     
     for (int i = 0; i < n; i++)
@@ -64,7 +64,7 @@ int main() {
 
 bool compare(int i, int j) {                // Prefix Doubling을 위한 비교 결과 반환 함수
     if (group[i] == group[j])               // 두 부분문자열을 묶어 앞쪽의 순위가 동일한 경우
-        return group[i+l] < group[j+l];     // 그 다음 부분문자열의 순위를 비교해 정렬
+        return group[i+l] < group[j+l];     // 그 다음 부분문자열의 순위를 비교하여 결과 반환
     else                                    // 앞쪽 부분문자열의 순위가 다를 경우
-        return group[i] < group[j];         // 그대로 정렬
+        return group[i] < group[j];         // 앞쪽 부분문자열의 순위 비교 결과를 반환
 }
