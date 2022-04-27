@@ -21,11 +21,11 @@ string t, p;    // 문자열 T와 패턴 문자열을 저장
 
 int main() {
     ifstream fin("indata.txt");     // 데이터 입력 파일 open
-    ofstream fout("outdata.txt");   // 결과 출력 파일 open
     if (!fin.is_open()) {           // File이 존재하지 않을 경우
         cout << "There is no 'indata.txt' file . . ." << endl; // Error 출력
         return -1;                  // 실행 종료
     }
+    ofstream fout("outdata.txt");   // 결과 출력 파일 open
 
     chrono::system_clock::time_point start, finish; // 시간 측정을 위한 변수
     chrono::microseconds duration;  // 시간 차이를 계산하기 위한 변수
