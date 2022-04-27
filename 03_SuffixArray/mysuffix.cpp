@@ -35,18 +35,11 @@ int main() {
     buildlcp();                     // LCP 배열 생성
     buildlr(0, n-1);                // LCP_LR 배열 생성
 
-    for (int i = 0; i < n; i++)
-        cout << lcp_lr[i] << ' ';
-    cout << endl;
-
-    for (int i = 0; i < n; i++)
-        cout << t.substr(sa[i]) << endl;
-
     start = chrono::system_clock::now();    // 시간 측정 시작
     for (int i = 0; i < k; i++) {           // k번 반복하며
         fin >> s >> m;                      // 패턴의 시작 위치와 길이 입력
         p = t.substr(s, m);
-        // 접미사 배열 탐색 코드 작성
+        // 패턴 문자열 탐색 코드 작성
     }
     finish = chrono::system_clock::now();   // 시간 측정 끝
     duration = chrono::duration_cast<chrono::microseconds>(finish - start);
@@ -109,9 +102,9 @@ int buildlr(int l, int r) {                 // LCP_LR 배열을 생성하는 함
     else                                    // 그렇지 않은 경우
         lcp_l = buildlr(l, m);              // 인접한 범위가 나타날 때까지 재귀적으로 함수 호출
     if (r == m+1)                           // 범위의 가장 오른쪽 접미사와 비교 대상 접미사가 인접한 경우
-        lcp_r = lcp[r];                     // 오른쪽 접미사와 비교 대상 접미사의 LCP 길이를 저장
+        lcp_r = lcp[m];                     // 오른쪽 접미사와 비교 대상 접미사의 LCP 길이를 저장
     else                                    // 그렇지 않은 경우
         lcp_r = buildlr(m, r);              // 인접한 범위가 나타날 때까지 재귀적으로 함수 호출
-    lcp_lr[m] = lcp[l] < lcp[m] ? lcp[l] : lcp[m];  // LCP_L과 LCP_R의 최소값을 LCP_LR 배열에 저장한 후
-    return lcp_lr[m];                               // 다른 LCP_LR 값 계산에 사용하기 위해 해당 값 반환 
+    lcp_lr[m] = lcp_l < lcp_r ? lcp_l : lcp_r;  // LCP_L과 LCP_R의 최소값을 LCP_LR 배열에 저장한 후
+    return lcp_lr[m];                           // 다른 LCP_LR 값 계산에 사용하기 위해 해당 값 반환
 }
