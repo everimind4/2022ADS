@@ -30,7 +30,7 @@ int main() {
 
     fin >> n >> k >> t;             // 파일에서 해당 변수들의 값을 Read
 
-    buildsa();                      // Suffix Array 생성
+    buildsa();                      // 접미사 배열 생성
 
     for (int i = 0; i < n; i++)
         cout << t.substr(sa[i]) << endl;
@@ -39,7 +39,7 @@ int main() {
     for (int i = 0; i < k; i++) {           // k번 반복하며
         fin >> s >> m;
         p = t.substr(s, m);
-        // Suffix Array 탐색 코드 작성
+        // 접미사 배열 탐색 코드 작성
     }
     finish = chrono::system_clock::now();   // 시간 측정 끝
     duration = chrono::duration_cast<chrono::microseconds>(finish - start);
@@ -48,10 +48,10 @@ int main() {
     return 0;
 }
 
-void buildsa() {                            // Suffix Array 생성
+void buildsa() {                            // 접미사 배열 생성
     for (int i = 0; i < n; i++) {           // 문자열의 길이만큼 반복
-        sa[i] = i;                          // Suffix Array 초기화
-        if (i < n - 1)                      // Suffix에 그룹 할당
+        sa[i] = i;                          // 접미사 배열 초기화
+        if (i < n - 1)                      // 접미사에 그룹 할당
             group[sa[i]] = t[i]-'a'+1;      // 알파벳 순서를 사용
         else                                // '$'의 경우
             group[n-1] = 0;                 // 가장 앞 그룹 할당
@@ -59,16 +59,16 @@ void buildsa() {                            // Suffix Array 생성
 
     l = 1;
     while (l <= n) {                        // 정렬 길이가 전체 길이를 넘기 전까지
-        sort(sa, sa+n, compare);            // 현재 그룹으로 Suffix를 정렬
+        sort(sa, sa+n, compare);            // 현재 그룹으로 접미사를 정렬
         nextgroup[sa[0]] = 0;               // 현재 가장 앞 그룹을 1번 그룹으로 지정
-        for (int i = 0; i < n-1; i++)       // 새로 정렬된 Suffix를 그룹핑
+        for (int i = 0; i < n-1; i++)       // 새로 정렬된 접미사를 그룹핑
             if (compare(sa[i], sa[i+1]))    // 부분문자열의 순위를 비교하여
                 nextgroup[sa[i+1]] = nextgroup[sa[i]]+1;    // 다르면 다음 그룹 할당
             else                            // 서로 순위가 동일한 경우
                 nextgroup[sa[i+1]] = nextgroup[sa[i]];      // 동일한 그룹 할당
         for (int i = 0; i < n; i++)         // 새로 할당한 그룹을
             group[i] = nextgroup[i];        // 기존 그룹에 Update
-        l <<= 1;                            // 비교 길이를 Douling
+        l <<= 1;                            // 비교 길이를 Doubling
     }
 }
 
