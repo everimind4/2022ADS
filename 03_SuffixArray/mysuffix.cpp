@@ -31,9 +31,13 @@ int main() {
 
     fin >> n >> k >> t;             // 파일에서 해당 변수들의 값을 Read
 
+    start = chrono::system_clock::now();    // 시간 측정 시작
     buildsa();                      // 접미사 배열 생성
     buildlcp();                     // LCP 배열 생성
     buildlr(0, n-1);                // LCP_LR 배열 생성
+    finish = chrono::system_clock::now();   // 시간 측정 끝
+    duration = chrono::duration_cast<chrono::microseconds>(finish - start);
+    cout << "접미사 배열 생성 소요 시간 : " << duration.count() << " μs" << endl;
 
     start = chrono::system_clock::now();    // 시간 측정 시작
     for (int i = 0; i < k; i++) {           // k번 반복하며
@@ -43,8 +47,7 @@ int main() {
     }
     finish = chrono::system_clock::now();   // 시간 측정 끝
     duration = chrono::duration_cast<chrono::microseconds>(finish - start);
-
-    cout << "실행에 걸린 시간 : " << duration.count() << " μs" << endl;
+    cout << "패턴 문자열 탐색 소요 시간 : " << duration.count() << " μs" << endl;
     return 0;
 }
 
