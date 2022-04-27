@@ -31,6 +31,11 @@ int main() {
     fin >> n >> k >> t;             // 파일에서 해당 변수들의 값을 Read
 
     buildsa();                      // 접미사 배열 생성
+    buildlcp();                     // LCP 배열 생성
+
+    for (int i = 0; i < n; i++)
+        cout << lcp[i] << ' ';
+    cout << endl;
 
     for (int i = 0; i < n; i++)
         cout << t.substr(sa[i]) << endl;
@@ -55,6 +60,8 @@ void buildsa() {                            // 접미사 배열 생성
             group[sa[i]] = t[i]-'a'+1;      // 알파벳 순서를 사용
         else                                // '$'의 경우
             group[n-1] = 0;                 // 가장 앞 그룹 할당
+    for (int i = 0; i < n; i++)             // 접미사 배열의 Inverse 생성
+        sa_i[sa[i]] = i;                    // 접미사 배열의 값을 Index로 하여 순번 저장
     }
 
     l = 1;
@@ -77,4 +84,17 @@ bool compare(int i, int j) {                // Prefix Doubling을 위한 비교 
         return group[i+l] < group[j+l];     // 그 다음 부분문자열의 순위를 비교하여 결과 반환
     else                                    // 앞쪽 부분문자열의 순위가 다를 경우
         return group[i] < group[j];         // 앞쪽 부분문자열의 순위 비교 결과를 반환
+}
+
+void buildlcp() {                           // LCP 배열을 생성하는 함수
+    int lcp_v;                              // LCP 길이를 저장할 변수
+    string a, b;                            // 비교할 부분문자열을 저장
+    for (int i = 0; i < n-1; i++) {         // LCP 배열을 생성하기 위해
+        lcp_v = 0;                          // (직전에 계산한) LCP 값을 0으로 초기화
+        a = t.substr(sa[sa_i[i]]);          // 원래 문자열의 i번째에 해당하는 접미사 배열의 순서와
+        b = t.substr(sa[sa_i[i]+1]);        // 그 다음 순서의 부분문자열을 각각 가져와서 저장
+        while (a[lcp_v] == b[lcp_v])        // 두 문자열이 일치하는 동안
+            lcp_v++;                        // 비교 길이를 증가시키며 LCP 계산
+        lcp[i] = lcp_v;                     // 계산한 LCP 값을 LCP 배열에 저장
+    }
 }
