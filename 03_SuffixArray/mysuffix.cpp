@@ -79,9 +79,9 @@ void buildsa() {                            // 접미사 배열 생성
 }
 
 bool compare(int i, int j) {                // Prefix Doubling을 위한 비교 결과 반환 함수
-    if (group[i] != group[j])               // 특정 부분문자열의 순위가 동일한 경우
+    if (group[i] != group[j])               // 특정 부분문자열의 순위가 다른 경우
         return group[i] < group[j];         // 순위 비교 결과를 바로 반환
-    else                                    // 해당 부분문자열의 순위가 다를 경우
+    else                                    // 해당 부분문자열의 순위가 같은 경우
         return group[i+l] < group[j+l];     // 그 다음 부분문자열의 순위를 비교하여 결과 반환
 }
 
