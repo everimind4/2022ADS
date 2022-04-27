@@ -12,6 +12,7 @@ void buildsa();                     // 접미사 배열을 생성하는 함수
 bool compare(int, int);             // 그룹 비교를 수행하는 함수
 void buildlcp();                    // LCP 배열을 생성하는 함수
 int buildlr(int, int);              // LCP_LR 배열을 생성하는 함수
+int search(int, int);               // 문자열 T에서 패턴을 찾는 함수
 
 // 접미사 배열, LCP 배열 저장 및 그룹을 위한 변수
 int sa[N], sa_i[N], lcp[N], lcp_lr[N], group[N], nextgroup[N], l;
@@ -43,7 +44,7 @@ int main() {
 
     start = chrono::system_clock::now();    // 시간 측정 시작
     for (int i = 0; i < k; i++) {           // k번 반복하며
-        fin >> s >> m;
+        fin >> s >> m;                      // 패턴의 시작 위치와 길이 입력
         p = t.substr(s, m);
         // 접미사 배열 탐색 코드 작성
     }
@@ -81,10 +82,10 @@ void buildsa() {                            // 접미사 배열 생성
 }
 
 bool compare(int i, int j) {                // Prefix Doubling을 위한 비교 결과 반환 함수
-    if (group[i] == group[j])               // 두 부분문자열을 묶어 앞쪽의 순위가 동일한 경우
+    if (group[i] != group[j])               // 특정 부분문자열의 순위가 동일한 경우
+        return group[i+l] < group[j];       // 순위 비교 결과를 바로 반환
+    else                                    // 해당 부분문자열의 순위가 다를 경우
         return group[i+l] < group[j+l];     // 그 다음 부분문자열의 순위를 비교하여 결과 반환
-    else                                    // 앞쪽 부분문자열의 순위가 다를 경우
-        return group[i] < group[j];         // 앞쪽 부분문자열의 순위 비교 결과를 반환
 }
 
 void buildlcp() {                           // LCP 배열을 생성하는 함수
@@ -102,7 +103,7 @@ void buildlcp() {                           // LCP 배열을 생성하는 함수
 
 int buildlr(int l, int r) {                 // LCP_LR 배열을 생성하는 함수 (재귀적으로 생성)
     int m = l+((r-l)>>1);                   // 이진 탐색의 중간 위치를 저장할 변수
-    int lcp_l, lcp_r;                       // LCP_LR 값을 저장할 변수
+    int lcp_l, lcp_r;                       // LCP_L, LCP_R 값을 저장할 변수
     if (l == m-1)                           // 범위의 가장 왼쪽 접미사와 비교 대상 접미사가 인접한 경우
         lcp_l = lcp[l];                     // 왼쪽 접미사와 비교 대상 접미사의 LCP 길이를 저장
     else                                    // 그렇지 않은 경우
@@ -111,6 +112,6 @@ int buildlr(int l, int r) {                 // LCP_LR 배열을 생성하는 함
         lcp_r = lcp[r];                     // 오른쪽 접미사와 비교 대상 접미사의 LCP 길이를 저장
     else                                    // 그렇지 않은 경우
         lcp_r = buildlr(m, r);              // 인접한 범위가 나타날 때까지 재귀적으로 함수 호출
-    lcp_lr[m] = lcp[l] < lcp[m] ? lcp[l] : lcp[m];  // LCP_L과 LCP_R의 최소값을 LCP_LR 배열에 저장
-    return lcp_lr[m];                               // 해당 LCP_LR 값을 반환하여 다른 LCP_LR 값 계산에 사용
+    lcp_lr[m] = lcp[l] < lcp[m] ? lcp[l] : lcp[m];  // LCP_L과 LCP_R의 최소값을 LCP_LR 배열에 저장한 후
+    return lcp_lr[m];                               // 다른 LCP_LR 값 계산에 사용하기 위해 해당 값 반환 
 }
