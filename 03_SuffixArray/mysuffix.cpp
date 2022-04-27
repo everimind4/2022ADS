@@ -42,8 +42,8 @@ int main() {
     start = chrono::system_clock::now();    // 시간 측정 시작
     for (int i = 0; i < k; i++) {           // k번 반복하며
         fin >> s >> m;                      // 패턴의 시작 위치와 길이 입력
-        p = t.substr(s, m);
-        // 패턴 문자열 탐색 코드 작성
+        p = t.substr(s, m);                 // 시작 위치와 길이로 패턴 추출
+        cout << search(p) << endl;          // 패턴 등장 횟수 탐색 후 출력
     }
     finish = chrono::system_clock::now();   // 시간 측정 끝
     duration = chrono::duration_cast<chrono::microseconds>(finish - start);
@@ -110,4 +110,33 @@ int buildlr(int l, int r) {                 // LCP_LR 배열을 생성하는 함
         lcp_r = buildlr(m, r);              // 인접한 범위가 나타날 때까지 재귀적으로 함수 호출
     lcp_lr[m] = lcp_l < lcp_r ? lcp_l : lcp_r;  // LCP_L과 LCP_R의 최소값을 LCP_LR 배열에 저장한 후
     return lcp_lr[m];                           // 다른 LCP_LR 값 계산에 사용하기 위해 해당 값 반환
+}
+
+int search(string p) {                      // 문자열 T에서 패턴 P를 탐색해 등장 횟수를 반환하는 함수
+    int is, ie;                             // 탐색할 패턴을 접두사로 하는 접미사의 시작과 끝 위치 저장
+    int l, r, m;                            // 이진 탐색 범위와 중간 위치를 저장할 변수
+    l = 0, r = n-1;                         // 이진 탐색 범위 초기화
+    p += '#';                               // 패턴 문자열의 뒤에 모든 알파벳보다 앞에 위치한 '#' 추가
+    while (l != r-1) {                      // 탐색 범위를 좁혀 가며
+        m = l+((r-l)>>1);                   // 탐색 범위의 중앙 위치를 계산
+        if (p.substr(lcp_lr[m]) > t.substr(sa[m]).substr(lcp_lr[m]))    // 패턴 문자열과 탐색 문자열 비교
+            l = m;                          // 패턴 문자열이 더 뒤에 있는 경우 오른쪽 범위 탐색
+        else                                // 패턴 문자열이 더 앞에 있는 경우
+            r = m;                          // 왼쪽 범위 탐색
+    }
+    is = r;                                 // 탐색이 완료되었으므로 시작 위치를 기록
+    l = 0, r = n-1;                         // 이진 탐색 범위 다시 초기화
+    p.erase(p.size()-1);                    // 패턴 문자열의 마지막 문자 제거
+    p += '~';                               // 패턴 문자열의 뒤에 모든 알파벳보다 뒤에 위치한 '~' 추가
+    while (r != l+1) {                      // 탐색 범위를 좁혀 가며
+        m = l+((r-l)>>1);                   // 탐색 범위의 중앙 위치를 계산
+        if (p.substr(lcp_lr[m]) > t.substr(sa[m]).substr(lcp_lr[m]))    // 패턴 문자열과 탐색 문자열 비교
+            l = m;                          // 패턴 문자열이 더 뒤에 있는 경우 오른쪽 범위 탐색
+        else                                // 패턴 문자열이 더 앞에 있는 경우
+            r = m;                          // 왼쪽 범위 탐색
+    }
+    ie = l;                                 // 탐색이 완료되었으므로 마지막 위치를 기록
+    if (is > ie)                            // 패턴이 마지막에 단 한번만 등장하는 경우 is == ie + 1이 됨
+        ie = is;                            // ie를 is와 동일하게 함으로써 예외를 처리
+    return ie-is+1;                         // (끝 위치) - (시작 위치) + 1 = 등장 횟수를 반환
 }
