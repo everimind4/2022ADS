@@ -30,13 +30,13 @@ int main() {
 
     fin >> n >> k >> t;             // 파일에서 해당 변수들의 값을 Read
 
-    bulidsa();                      // Suffix Array 생성
+    buildsa();                      // Suffix Array 생성
 
     for (int i = 0; i < n; i++)
         cout << t.substr(sa[i]) << endl;
 
     start = chrono::system_clock::now();    // 시간 측정 시작
-    for (int i = 0; j < k; i++) {           // k번 반복하며
+    for (int i = 0; i < k; i++) {           // k번 반복하며
         fin >> s >> m;
         p = t.substr(s, m);
         // Suffix Array 탐색 코드 작성
