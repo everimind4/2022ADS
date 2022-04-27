@@ -20,7 +20,8 @@ int n, k, s, m; // 문자열 T의 길이, 질의 횟수, 패턴의 시작 위치
 string t, p;    // 문자열 T와 패턴 문자열을 저장
 
 int main() {
-    ifstream fin("indata.txt");     // indata.txt 파일 open
+    ifstream fin("indata.txt");     // 데이터 입력 파일 open
+    ofstream fout("outdata.txt");   // 결과 출력 파일 open
     if (!fin.is_open()) {           // File이 존재하지 않을 경우
         cout << "There is no 'indata.txt' file . . ." << endl; // Error 출력
         return -1;                  // 실행 종료
@@ -43,7 +44,7 @@ int main() {
     for (int i = 0; i < k; i++) {           // k번 반복하며
         fin >> s >> m;                      // 패턴의 시작 위치와 길이 입력
         p = t.substr(s, m);                 // 시작 위치와 길이로 패턴 추출
-        cout << search(p) << endl;          // 패턴 등장 횟수 탐색 후 출력
+        fout << search(p) << endl;          // 패턴 등장 횟수 탐색 후 출력
     }
     finish = chrono::system_clock::now();   // 시간 측정 끝
     duration = chrono::duration_cast<chrono::microseconds>(finish - start);
