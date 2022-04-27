@@ -6,25 +6,49 @@
 
 using namespace std;
 
-#define MAX_N 10000000              // 문자열 T의 길이 최대값
+#define N 10000000                  // 문자열 T의 길이 최대값
 
-bool compare(int, int);
+void buildsa();                     // 접미사 배열을 생성하는 함수
+bool compare(int, int);             // 그룹 비교를 수행하는 함수
+void buildlcp();                    // LCP 배열을 생성하는 함수
+void buildlr(int, int);             // LCP_LR 배열을 생성하는 함수
 
-int sa[MAX_N], group[MAX_N], nextgroup[MAX_N], l; // 접미사 배열 저장 및 그룹핑을 위한 변수
+// 접미사 배열, LCP 배열 저장 및 그룹을 위한 변수
+int sa[N], sa_i[N], lcp[N], lcp_lr[N], group[N], nextgroup[N], l;
+int n, k, s, m; // 문자열 T의 길이, 질의 횟수, 패턴의 시작 위치, 길이
+string t, p;    // 문자열 T와 패턴 문자열을 저장
 
 int main() {
     ifstream fin("indata.txt");     // indata.txt 파일 open
     if (!fin.is_open()) {           // File이 존재하지 않을 경우
-        cout << "There is no 'indata.txt' file . . ." << endl;
-        return -1;
-    }                               // Error Message 출력
+        cout << "There is no 'indata.txt' file . . ." << endl; // Error 출력
+        return -1;                  // 실행 종료
+    }
+
     chrono::system_clock::time_point start, finish; // 시간 측정을 위한 변수
     chrono::microseconds duration;  // 시간 차이를 계산하기 위한 변수
-    int n, k, i, m;                 // 문자열 T의 길이, 질의 횟수, 패턴의 시작 위치, 길이
-    string t, p;                    // 문자열 T와 패턴 문자열을 저장
+
     fin >> n >> k >> t;             // 파일에서 해당 변수들의 값을 Read
 
-    // Suffix Array 구축
+    bulidsa();                      // Suffix Array 생성
+
+    for (int i = 0; i < n; i++)
+        cout << t.substr(sa[i]) << endl;
+
+    start = chrono::system_clock::now();    // 시간 측정 시작
+    for (int i = 0; j < k; i++) {           // k번 반복하며
+        fin >> s >> m;
+        p = t.substr(s, m);
+        // Suffix Array 탐색 코드 작성
+    }
+    finish = chrono::system_clock::now();   // 시간 측정 끝
+    duration = chrono::duration_cast<chrono::microseconds>(finish - start);
+
+    cout << "실행에 걸린 시간 : " << duration.count() << " μs" << endl;
+    return 0;
+}
+
+void buildsa() {                            // Suffix Array 생성
     for (int i = 0; i < n; i++) {           // 문자열의 길이만큼 반복
         sa[i] = i;                          // Suffix Array 초기화
         if (i < n - 1)                      // Suffix에 그룹 할당
@@ -46,20 +70,6 @@ int main() {
             group[i] = nextgroup[i];        // 기존 그룹에 Update
         l <<= 1;                            // 비교 길이를 Douling
     }
-    
-    for (int i = 0; i < n; i++)
-        cout << t.substr(sa[i]) << endl;
-
-    start = chrono::system_clock::now();    // 시간 측정 시작
-    for (int j = 0; j < k; j++) {   // k번 반복하며
-        fin >> i >> m;
-        p = t.substr(i, m);
-        // Suffix Array 탐색 코드 작성
-    }
-    finish = chrono::system_clock::now();   // 시간 측정 끝 
-    duration = chrono::duration_cast<chrono::microseconds>(finish - start);
-    cout << "실행에 걸린 시간 : " << duration.count() << " μs" << endl;
-    return 0;
 }
 
 bool compare(int i, int j) {                // Prefix Doubling을 위한 비교 결과 반환 함수
