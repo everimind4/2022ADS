@@ -15,7 +15,7 @@ int buildlr(int, int);              // LCP_LR 배열을 생성하는 함수
 int search(string);                 // 문자열 T에서 패턴을 찾는 함수
 
 // 접미사 배열, LCP 배열 저장 및 그룹을 위한 변수
-int sa[N], sa_i[N], lcp[N], lcp_lr[N], group[N], nextgroup[N], l;
+int sa[N], lcp[N], lcp_lr[N], group[N], nextgroup[N], l;
 int n, k, s, m; // 문자열 T의 길이, 질의 횟수, 패턴의 시작 위치, 길이
 string t, p;    // 문자열 T와 패턴 문자열을 저장
 
@@ -59,10 +59,7 @@ void buildsa() {                            // 접미사 배열 생성
             group[sa[i]] = t[i]-'a'+1;      // 알파벳 순서를 사용
         else                                // '$'의 경우
             group[n-1] = 0;                 // 가장 앞 그룹 할당
-    for (int i = 0; i < n; i++)             // 접미사 배열의 Inverse 생성
-        sa_i[sa[i]] = i;                    // 접미사 배열의 값을 Index로 하여 순번 저장
     }
-
     l = 1;
     while (l <= n) {                        // 정렬 길이가 전체 길이를 넘기 전까지
         sort(sa, sa+n, compare);            // 현재 그룹으로 접미사를 정렬
@@ -90,8 +87,8 @@ void buildlcp() {                           // LCP 배열을 생성하는 함수
     string a, b;                            // 비교할 부분문자열을 저장
     for (int i = 0; i < n-1; i++) {         // LCP 배열을 생성하기 위해
         l = 0;                              // (직전에 계산한) LCP 값을 0으로 초기화
-        a = t.substr(sa[sa_i[i]]);          // 원래 문자열의 i번째에 해당하는 접미사 배열의 순서와
-        b = t.substr(sa[sa_i[i]+1]);        // 그 다음 순서의 부분문자열을 각각 가져와서 저장
+        a = t.substr(sa[i]);                // 원래 문자열의 i번째에 해당하는 접미사 배열의 순서와
+        b = t.substr(sa[i+1]);              // 그 다음 순서의 부분문자열을 각각 가져와서 저장
         while (a[l] == b[l])                // 두 문자열이 일치하는 동안
             l++;                            // 비교 길이를 증가시키며 LCP 계산
         lcp[i] = l;                         // 계산한 LCP 값을 LCP 배열에 저장
