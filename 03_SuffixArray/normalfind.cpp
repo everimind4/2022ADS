@@ -22,8 +22,8 @@ int main() {
     }
     ofstream fout("outdata.txt");   // 결과 출력 파일 open
 
-
     fin >> n >> k >> t;             // 파일에서 해당 변수들의 값을 Read
+    n = t.size();
 
     int count;
     for (int i = 0; i < k; i++) {               // k번 반복하며
