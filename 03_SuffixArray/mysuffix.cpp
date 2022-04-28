@@ -31,6 +31,7 @@ int main() {
     ofstream fout("outdata.txt");   // 결과 출력 파일 open
 
     fin >> n >> k >> t;             // 파일에서 해당 변수들의 값을 Read
+    n = t.size();
 
     start = chrono::system_clock::now();    // 시간 측정 시작
     buildsa();                              // 접미사 배열 생성
