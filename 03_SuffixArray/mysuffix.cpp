@@ -22,8 +22,8 @@ string t, p;    // 문자열 T와 패턴 문자열을 저장
 int main() {
     ifstream fin("indata.txt");     // 데이터 입력 파일 open
     if (!fin.is_open()) {           // File이 존재하지 않을 경우
-        cout << "There is no 'indata.txt' file . . ." << endl; // Error 출력
-        return -1;                  // 실행 종료
+        cout << "There is no 'indata.txt' file . . ." << endl;
+        return -1;                  // Usage 출력 후 실행 종료
     }
     ofstream fout("outdata.txt");   // 결과 출력 파일 open
 
@@ -33,9 +33,9 @@ int main() {
     fin >> n >> k >> t;             // 파일에서 해당 변수들의 값을 Read
 
     start = chrono::system_clock::now();    // 시간 측정 시작
-    buildsa();                      // 접미사 배열 생성
-    buildlcp();                     // LCP 배열 생성
-    buildlr(0, n-1);                // LCP_LR 배열 생성
+    buildsa();                              // 접미사 배열 생성
+    buildlcp();                             // LCP 배열 생성
+    buildlr(0, n-1);                        // LCP_LR 배열 생성
     finish = chrono::system_clock::now();   // 시간 측정 끝
     duration = chrono::duration_cast<chrono::microseconds>(finish - start);
     cout << "접미사 배열 생성 소요 시간 : " << duration.count() << " μs" << endl;
