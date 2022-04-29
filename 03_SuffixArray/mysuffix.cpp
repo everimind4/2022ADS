@@ -35,10 +35,10 @@ int main() {
 
     start = chrono::system_clock::now();    // 시간 측정 시작
     buildsa();                              // 접미사 배열 생성
-    buildlcp();                             // LCP 배열 생성
-    buildlr(0, n-1);                        // LCP_LR 배열 생성
     finish = chrono::system_clock::now();   // 시간 측정 끝
     duration1 = chrono::duration_cast<chrono::microseconds>(finish - start);
+    buildlcp();                             // LCP 배열 생성
+    buildlr(0, n-1);                        // LCP_LR 배열 생성
 
     int count;
     for (int i = 0; i < k; i++) {               // k번 반복하며
