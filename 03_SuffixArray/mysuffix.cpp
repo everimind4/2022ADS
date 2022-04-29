@@ -119,11 +119,13 @@ int buildlr(int l, int r) {                 // LCP_LR 배열을 생성하는 함
 int search(string p) {                      // 문자열 T에서 패턴 P를 탐색해 등장 횟수를 반환하는 함수
     int is, ie;                             // 탐색할 패턴을 접두사로 하는 접미사의 시작과 끝 위치 저장
     int l, r, m;                            // 이진 탐색 범위와 중간 위치를 저장할 변수
+    int lcp_lr_m;                           // lcp_lr 값과 패턴의 길이를 비교해 최소값을 저장할 변수
     l = 0, r = n-1;                         // 이진 탐색 범위 초기화
     p += '#';                               // 패턴 문자열의 뒤에 모든 알파벳보다 앞에 위치한 '#' 추가
     while (l != r-1) {                      // 탐색 범위를 좁혀 가며
         m = l+((r-l)>>1);                   // 탐색 범위의 중앙 위치를 계산
-        if (p.substr(lcp_lr[m]) > t.substr(sa[m]).substr(lcp_lr[m]))    // 패턴 문자열과 탐색 문자열 비교
+        lcp_lr_m = p.size() > lcp_lr[m] ? lcp_lr[m] : p.size()-1;   // 패턴이 lcp_lr보다 짧을 때 예외처리
+        if (p.substr(lcp_lr_m) > t.substr(sa[m]).substr(lcp_lr_m))  // 패턴 문자열과 탐색 문자열 비교
             l = m;                          // 패턴 문자열이 더 뒤에 있는 경우 오른쪽 범위 탐색
         else                                // 패턴 문자열이 더 앞에 있는 경우
             r = m;                          // 왼쪽 범위 탐색
@@ -134,13 +136,14 @@ int search(string p) {                      // 문자열 T에서 패턴 P를 탐
     p += '~';                               // 패턴 문자열의 뒤에 모든 알파벳보다 뒤에 위치한 '~' 추가
     while (r != l+1) {                      // 탐색 범위를 좁혀 가며
         m = l+((r-l)>>1);                   // 탐색 범위의 중앙 위치를 계산
-        if (p.substr(lcp_lr[m]) > t.substr(sa[m]).substr(lcp_lr[m]))    // 패턴 문자열과 탐색 문자열 비교
+        lcp_lr_m = p.size() > lcp_lr[m] ? lcp_lr[m] : p.size()-1;   // 패턴이 lcp_lr보다 짧을 때 예외처리
+        if (p.substr(lcp_lr_m) > t.substr(sa[m]).substr(lcp_lr_m))  // 패턴 문자열과 탐색 문자열 비교
             l = m;                          // 패턴 문자열이 더 뒤에 있는 경우 오른쪽 범위 탐색
         else                                // 패턴 문자열이 더 앞에 있는 경우
             r = m;                          // 왼쪽 범위 탐색
     }
     ie = l;                                 // 탐색이 완료되었으므로 마지막 위치를 기록
-    if (p > t.substr(sa[n-1]))              // 패턴이 사전 순서로 마지막 접미사까지 등장하는 경우
+    if (ie == n-2 && p > t.substr(sa[n-1])) // 패턴이 사전 순서로 마지막 접미사까지 등장하는 경우
         ie++;                               // ie를 맨 마지막 위치로 지정하여 예외를 처리
     return ie-is+1;                         // (끝 위치) - (시작 위치) + 1 = 등장 횟수를 반환
 }
