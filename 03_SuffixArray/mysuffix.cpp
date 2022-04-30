@@ -124,7 +124,9 @@ int search(string p) {                      // 문자열 T에서 패턴 P를 탐
     p += '#';                               // 패턴 문자열의 뒤에 모든 알파벳보다 앞에 위치한 '#' 추가
     while (l != r-1) {                      // 탐색 범위를 좁혀 가며
         m = l+((r-l)>>1);                   // 탐색 범위의 중앙 위치를 계산
-        lcp_lr_m = p.size() > lcp_lr[m] ? lcp_lr[m] : p.size()-1;   // 패턴이 lcp_lr보다 짧을 때 예외처리
+        // 패턴 문자열과 비교 대상 문자열의 길이를 비교해 더 작은 값을 lcp_lr_m에 저장
+        lcp_lr_m = p.size() > t.substr(sa[m]).size() ? t.substr(sa[m]).size() : p.size();
+        lcp_lr_m = lcp_lr_m > lcp_lr[m] ? lcp_lr[m] : lcp_lr_m;   // 두 값의 최소값과 lcp_lr의 최소값
         if (p.substr(lcp_lr_m) > t.substr(sa[m]).substr(lcp_lr_m))  // 패턴 문자열과 탐색 문자열 비교
             l = m;                          // 패턴 문자열이 더 뒤에 있는 경우 오른쪽 범위 탐색
         else                                // 패턴 문자열이 더 앞에 있는 경우
@@ -136,7 +138,9 @@ int search(string p) {                      // 문자열 T에서 패턴 P를 탐
     p += '~';                               // 패턴 문자열의 뒤에 모든 알파벳보다 뒤에 위치한 '~' 추가
     while (r != l+1) {                      // 탐색 범위를 좁혀 가며
         m = l+((r-l)>>1);                   // 탐색 범위의 중앙 위치를 계산
-        lcp_lr_m = p.size() > lcp_lr[m] ? lcp_lr[m] : p.size()-1;   // 패턴이 lcp_lr보다 짧을 때 예외처리
+        // 패턴 문자열과 비교 대상 문자열의 길이를 비교해 더 작은 값을 lcp_lr_m에 저장
+        lcp_lr_m = p.size() > t.substr(sa[m]).size() ? t.substr(sa[m]).size() : p.size();
+        lcp_lr_m = lcp_lr_m > lcp_lr[m] ? lcp_lr[m] : lcp_lr_m;   // 두 값의 최소값과 lcp_lr의 최소값
         if (p.substr(lcp_lr_m) > t.substr(sa[m]).substr(lcp_lr_m))  // 패턴 문자열과 탐색 문자열 비교
             l = m;                          // 패턴 문자열이 더 뒤에 있는 경우 오른쪽 범위 탐색
         else                                // 패턴 문자열이 더 앞에 있는 경우
