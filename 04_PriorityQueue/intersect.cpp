@@ -6,47 +6,76 @@ using namespace std;
 
 struct segment {
     int num;
-    long xs;
-    long ys;
-    long xe;
-    long ye;
+    long xs, ys, xe, ye;
 
     segment(int N, long a, long b, long c, long d)
-         : num(N), xs(a), ys(b), xe(c), ye(d) {}
+        : num(N), xs(a), ys(b), xe(c), ye(d) {}
 };
+struct result {
+    int si, sj;
 
-struct compare {
+    result(int i, int j) : si(i), sj(j) {}
+};
+struct compareseg {
     bool operator()(const segment& seg1, const segment& seg2) {
         return seg1.xs > seg2.xs;
+    }
+};
+struct compareres {
+    bool operator()(const result& res1, const result& res2) {
+        if (res1.si > res2.si)
+            return true;
+        else if (res1.si == res2.si)
+            return res1.sj > res2.sj;
+        else
+            return false;
     }
 };
 
 bool intersect(const segment&, const segment&);
 
-priority_queue<segment, vector<segment>, compare> pq;
+priority_queue<segment, vector<segment>, compareseg> pq;
+priority_queue<result, vector<result>, compareres> res;
+vector<segment> cmp;
+
 int n, xs, ys, xe, ye;
 
 int main() {
     ifstream fin("in_segment.txt");
     if (!fin.is_open()) {
-        cout << "There is no 'indata.txt' file . . ." << endl;
+        cout << "There is no 'in_segment.txt' file . . ." << endl;
         return -1;
     }
 
     fin >> n;
     for (int i = 0; i < n; i++) {
         fin >> xs >> ys >> xe >> ye;
-        pq.push(segment(i+1, xs, xe, ys, ye));
+        pq.push(segment(i+1, xs, ys, xe, ye));
     }
 
     while (!pq.empty()) {
         segment temp = pq.top();
-        cout << temp.num << ' '
-            << temp.xs << ' '
-            << temp.xe << ' '
-            << temp.ys << ' '
-            << temp.ye << endl;
         pq.pop();
+        while (!pq.empty() && pq.top().xs <= temp.xe) {
+            cmp.push_back(pq.top());
+            pq.pop();
+        }
+        while (!cmp.empty()) {
+            if (intersect(temp, cmp.back())) {
+                if (temp.num < cmp.back().num)
+                    res.push(result(temp.num, cmp.back().num));
+                else
+                    res.push(result(cmp.back().num, temp.num));
+            }
+            pq.push(cmp.back());
+            cmp.pop_back();
+        }
+    }
+
+    while (!res.empty()) {
+        result temp = res.top();
+        cout << temp.si << ' ' << temp.sj << endl;
+        res.pop();
     }
 
     return 0;
