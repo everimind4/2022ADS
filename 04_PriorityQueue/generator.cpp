@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <random>
 #include <chrono>
+#include <vector>
 
 using namespace std;
 
@@ -13,6 +14,15 @@ uniform_int_distribution<int> xlen(1, 10);  // Segment의 x축 길이 설정
 uniform_int_distribution<int> ylen(1, 5);   // Segment의 y축 길이 설정
 uniform_int_distribution<int> coin(0, 1);   // Coin Flip
 uniform_int_distribution<int> jump(5, 50);  // 시작 위치 변경
+
+struct segment {        // Line Segment를 저장할 구조체
+    int xs, ys, xe, ye; // Line Segment 좌표값
+    // Line Segment 생성자
+    segment(int a, int b, int c, int d)
+        : xs(a), ys(b), xe(c), ye(d) {}
+};
+
+vector<segment> segments;   // Line Segment를 저장할 Vector
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {    // 생성할 Segment 개수만 입력됐는지 검사
@@ -34,8 +44,18 @@ int main(int argc, char* argv[]) {
         else                                // 0이 나온 경우
             ye = ys - ylen(gen) * 2 - 1;    // 끝나는 위치의 y 좌표값이 감소함
         start += jump(gen);                 // 시작 위치를 다음으로 변경 (중복 제거)
-        fout << xs << ' ' << ys << ' ' << xe << ' ' << ye << endl;  // 좌표값 출력
-        count++;                            // 생성 개수 증가
+        segments.push_back(segment(xs, ys, xe, ye));
+        count++;                            // 생성한 Segment 개수 1 증가
+    }
+
+    while (!segments.empty()) {             // 모든 Segment에 대해
+        uniform_int_distribution<int> pick(0, segments.size() - 1);
+        int numseg = pick(gen);             // 무작위로 Segment를 하나 추출
+        fout << segments[numseg].xs << ' '  // 좌표 값을 차례대로 파일에 출력
+            << segments[numseg].ys << ' '
+            << segments[numseg].xe << ' '
+            << segments[numseg].ye << endl;
+        segments.erase(segments.begin() + numseg);  // 출력한 Segment를 삭제
     }
 
     return 0;
