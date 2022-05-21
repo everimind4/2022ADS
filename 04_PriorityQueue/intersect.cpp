@@ -38,6 +38,9 @@ bool intersect(const segment&, const segment&); // 교차 여부를 판단할 �
 priority_queue<segment, vector<segment>, compareseg> pq;
 priority_queue<result, vector<result>, compareres> res;
 vector<segment> cmp;    // 교차 여부 판단을 위해 사용하는 벡터
+int* count;             // 최다 교차 Segment 추출을 위한 교차 횟수 저장
+int count_max;          // 최다 교차 회수를 저장
+int segnum;             // 최다 교차 Segment 번호를 저장
 
 int n, xs, ys, xe, ye;  // 파일에서 Segment 개수 및 좌표 값을 입력
 
@@ -47,8 +50,10 @@ int main() {
         cout << "There is no 'in_segment.txt' file . . ." << endl;
         return -1;                  // 예외처리
     }
+    ofstream fout("out_segment.txt");           // 출력 파일 Open
 
     fin >> n;                                   // Segment 개수 입력
+    count = new int[n];                         // 교차 횟수 배열 동적 할당
     for (int i = 0; i < n; i++) {               // Segment 개수만큼 반복
         fin >> xs >> ys >> xe >> ye;            // Segment 좌표 값 입력
         pq.push(segment(i+1, xs, ys, xe, ye));  // Priority Queue에 저장
@@ -67,6 +72,8 @@ int main() {
                     res.push(result(temp.num, cmp.back().num));
                 else                            // 사전 순으로 결과 저장
                     res.push(result(cmp.back().num, temp.num));
+                count[temp.num-1]++;            // 교차 횟수 Count 증가
+                count[cmp.back().num-1]++;      // 교차 횟수 Count 증가
             }
             pq.push(cmp.back());    // 비교한 Segment를 Priority Queue로 복원
             cmp.pop_back();         // 비교 대상에서 삭제
@@ -75,9 +82,17 @@ int main() {
 
     while (!res.empty()) {          // 교차하는 Segment 탐색 결과에 대해
         result temp = res.top();    // 맨 앞에서부터 차례대로
-        cout << temp.si << ' ' << temp.sj << endl;  // Segment 번호 출력
+        fout << temp.si << ' ' << temp.sj << endl;  // Segment 번호 출력
         res.pop();                  // 출력 후 삭제
     }
+
+    for (int i = 0; i < n; i++) {   // 전체 Segment에 대해
+        if (count_max < count[i]) { // 교차 횟수를 순회하여
+            count_max = count[i];   // 최대 교차 횟수 탐색
+            segnum = i+1;           // 최대 교차 Segment 번호 저장
+        }
+    }
+    fout << segnum << endl;         // 번호 출력
 
     return 0;
 }
