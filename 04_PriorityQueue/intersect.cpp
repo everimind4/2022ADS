@@ -93,6 +93,7 @@ int main() {
         }
     }
     fout << segnum << endl;         // 번호 출력
+    delete[] count;                 // 동적 할당 해제
 
     return 0;
 }
