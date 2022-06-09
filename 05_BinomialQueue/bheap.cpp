@@ -4,18 +4,20 @@
 
 using namespace std;
 
-void merge(node*, node*);
-void insert(int);
-void pop();
-
 struct node {
     int key;
     int deg;
     string name;
     node *down, *next;
 
-    node(int key, string name) : key(key), deg(0), name(name), down(nullptr), next(nullptr) {};
-}
+    node(int key, string name) :
+    key(key), deg(0), name(name),
+    down(nullptr), next(nullptr) {};
+};
+
+void merge(node*, node*);
+void insert(int);
+void pop();
 
 int main() {
     ifstream fin("bhin.txt");       // 입력 파일 Open
@@ -30,4 +32,16 @@ int main() {
         getline(fin, line);         // 한 줄씩 읽어서 line에 저장
         cout << line << endl;
     }
+}
+
+void merge(node* a, node* b) {
+
+}
+
+void insert(int key) {
+
+}
+
+void pop() {
+
 }
