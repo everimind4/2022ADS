@@ -15,9 +15,11 @@ struct node {
     down(nullptr), next(nullptr) {};
 };
 
-void merge(node*, node*);
-void insert(int);
+void insert(int, string);
 void pop();
+void merge(node*, node*);
+
+node *bheap = nullptr;
 
 int main() {
     ifstream fin("bhin.txt");       // 입력 파일 Open
@@ -34,14 +36,19 @@ int main() {
     }
 }
 
-void merge(node* a, node* b) {
-
-}
-
-void insert(int key) {
-
+void insert(int key, string name) {
+    node *temp = new node(key, name);
+    if (bheap == nullptr) {
+        bheap = temp;
+    } else {
+        merge(bheap, temp);
+    }
 }
 
 void pop() {
+
+}
+
+void merge(node* a, node* b) {
 
 }
