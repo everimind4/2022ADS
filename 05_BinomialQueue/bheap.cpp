@@ -68,7 +68,7 @@ void pop() {
 
 int top(node* bheap) {
     if (bheap == nullptr)
-        return;
+        return 0;
     node *temp;
     int min = 100000;
     for (temp = bheap; temp != nullptr; temp = temp->next)
@@ -78,5 +78,23 @@ int top(node* bheap) {
 }
 
 void merge(node* a, node* b) {
-
+    node *ta = a, *tb = b, *root, *down;
+    while (tb != nullptr) {
+        while (ta != nullptr) {
+            if (ta->deg == tb->deg) {
+                if (ta->key > tb->key) {
+                    root = tb;
+                    down = ta;
+                } else {
+                    root = ta;
+                    down = tb;
+                }
+                down->next = root->down;
+                root->down = down;
+                root->deg++;
+            }
+            ta = ta->next;
+        }
+        tb = tb->next;
+    }
 }
