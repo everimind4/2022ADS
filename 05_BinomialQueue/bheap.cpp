@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <queue>
 
 using namespace std;
@@ -33,7 +34,17 @@ int main() {
     string line;                    // 한 줄씩 저장할 string 변수
     while (fin.peek() != EOF) {     // 파일 전체를 읽어들이는 동안
         getline(fin, line);         // 한 줄씩 읽어서 line에 저장
-        cout << line << endl;
+        switch (line[0]) {
+            case '+':
+                insert(stoi(line.substr(line.substr(2).find(' ')+3)),
+                            line.substr(2, line.substr(2).find(' ')));
+                break;
+            case 'p':
+                pop();
+                break;
+            default:
+                break;
+        }
     }
 }
 
