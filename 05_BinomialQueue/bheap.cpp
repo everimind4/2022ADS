@@ -38,17 +38,15 @@ int main() {
 
 void insert(int key, string name) {
     node *temp = new node(key, name);
-    if (bheap == nullptr) {
+    if (bheap == nullptr)
         bheap = temp;
-    } else {
+    else
         merge(bheap, temp);
-    }
 }
 
 void pop() {
-    if (bheap == nullptr) {
+    if (bheap == nullptr)
         return;
-    }
     node *temp, *down, *prev = nullptr;
     int min = 100000;
     priority_queue<string, vector<string>, greater<string>> res;
