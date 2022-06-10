@@ -61,9 +61,7 @@ void pop() {
             if (prev)
                 prev->next = temp->next;
             down = temp->down;
-            prev = temp;
             delete(temp);
-            temp = temp->next;
             merge(bheap, down);
         } else {
             prev = temp;
