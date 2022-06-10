@@ -17,6 +17,7 @@ struct node {
 
 void insert(int, string);
 void pop();
+int top(node*);
 void merge(node*, node*);
 
 node *bheap = nullptr;
@@ -45,27 +46,35 @@ void insert(int key, string name) {
 }
 
 void pop() {
+    node *temp, *down, *prev = nullptr;
+    int min = top(bheap);
+    priority_queue<string, vector<string>, greater<string>> res;
+    while (top(bheap) == min) {
+        for (temp = bheap; temp != nullptr; temp = temp->next) {
+            if (min == temp->key) {
+                res.push(temp->name);
+                if (prev != nullptr)
+                    prev->next = temp->next;
+                down = temp->down;
+                delete(temp);
+                merge(bheap, down);
+            } else {
+                prev = temp;
+                temp = temp->next;
+            }
+        }
+    }
+}
+
+int top(node* bheap) {
     if (bheap == nullptr)
         return;
-    node *temp, *down, *prev = nullptr;
+    node *temp;
     int min = 100000;
-    priority_queue<string, vector<string>, greater<string>> res;
     for (temp = bheap; temp != nullptr; temp = temp->next)
         if (min > temp->key)
             min = temp->key;
-    for (temp = bheap; temp != nullptr; temp = temp->next) {
-        if (min == temp->key) {
-            res.push(temp->name);
-            if (prev)
-                prev->next = temp->next;
-            down = temp->down;
-            delete(temp);
-            merge(bheap, down);
-        } else {
-            prev = temp;
-            temp = temp->next;
-        }
-    }
+    return min;
 }
 
 void merge(node* a, node* b) {
