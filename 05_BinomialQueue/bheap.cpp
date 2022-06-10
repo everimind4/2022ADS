@@ -46,7 +46,30 @@ void insert(int key, string name) {
 }
 
 void pop() {
-
+    if (bheap == nullptr) {
+        return;
+    }
+    node *temp, *down, *prev = nullptr;
+    int min = 100000;
+    priority_queue<string, vector<string>, greater<string>> res;
+    for (temp = bheap; temp != nullptr; temp = temp->next)
+        if (min > temp->key)
+            min = temp->key;
+    for (temp = bheap; temp != nullptr; temp = temp->next) {
+        if (min == temp->key) {
+            res.push(temp->name);
+            if (prev)
+                prev->next = temp->next;
+            down = temp->down;
+            prev = temp;
+            delete(temp);
+            temp = temp->next;
+            merge(bheap, down);
+        } else {
+            prev = temp;
+            temp = temp->next;
+        }
+    }
 }
 
 void merge(node* a, node* b) {
